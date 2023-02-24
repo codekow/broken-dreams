@@ -1,0 +1,9 @@
+apiVersion: v1
+data:
+  REDIS_PASSWORD: t4Ph722qJ5QHeQ1qfu36
+kind: ConfigMap
+metadata:
+  creationTimestamp: null
+  labels:
+    io.kompose.service: redis-cache-env-redis-cache-env
+  name: env-redis-cache-env

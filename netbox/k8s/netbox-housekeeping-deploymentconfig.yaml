@@ -1,0 +1,267 @@
+apiVersion: v1
+kind: DeploymentConfig
+metadata:
+  creationTimestamp: null
+  labels:
+    io.kompose.service: netbox-housekeeping
+  name: netbox-housekeeping
+spec:
+  replicas: 1
+  selector:
+    io.kompose.service: netbox-housekeeping
+  strategy:
+    resources: {}
+    type: Recreate
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        io.kompose.network/netbox-docker-default: "true"
+        io.kompose.service: netbox-housekeeping
+    spec:
+      containers:
+        - args:
+            - /opt/netbox/housekeeping.sh
+          env:
+            - name: CORS_ORIGIN_ALLOW_ALL
+              valueFrom:
+                configMapKeyRef:
+                  key: CORS_ORIGIN_ALLOW_ALL
+                  name: env-netbox-env
+            - name: DB_HOST
+              valueFrom:
+                configMapKeyRef:
+                  key: DB_HOST
+                  name: env-netbox-env
+            - name: DB_NAME
+              valueFrom:
+                configMapKeyRef:
+                  key: DB_NAME
+                  name: env-netbox-env
+            - name: DB_PASSWORD
+              valueFrom:
+                configMapKeyRef:
+                  key: DB_PASSWORD
+                  name: env-netbox-env
+            - name: DB_USER
+              valueFrom:
+                configMapKeyRef:
+                  key: DB_USER
+                  name: env-netbox-env
+            - name: EMAIL_FROM
+              valueFrom:
+                configMapKeyRef:
+                  key: EMAIL_FROM
+                  name: env-netbox-env
+            - name: EMAIL_PASSWORD
+              valueFrom:
+                configMapKeyRef:
+                  key: EMAIL_PASSWORD
+                  name: env-netbox-env
+            - name: EMAIL_PORT
+              valueFrom:
+                configMapKeyRef:
+                  key: EMAIL_PORT
+                  name: env-netbox-env
+            - name: EMAIL_SERVER
+              valueFrom:
+                configMapKeyRef:
+                  key: EMAIL_SERVER
+                  name: env-netbox-env
+            - name: EMAIL_SSL_CERTFILE
+              valueFrom:
+                configMapKeyRef:
+                  key: EMAIL_SSL_CERTFILE
+                  name: env-netbox-env
+            - name: EMAIL_SSL_KEYFILE
+              valueFrom:
+                configMapKeyRef:
+                  key: EMAIL_SSL_KEYFILE
+                  name: env-netbox-env
+            - name: EMAIL_TIMEOUT
+              valueFrom:
+                configMapKeyRef:
+                  key: EMAIL_TIMEOUT
+                  name: env-netbox-env
+            - name: EMAIL_USERNAME
+              valueFrom:
+                configMapKeyRef:
+                  key: EMAIL_USERNAME
+                  name: env-netbox-env
+            - name: EMAIL_USE_SSL
+              valueFrom:
+                configMapKeyRef:
+                  key: EMAIL_USE_SSL
+                  name: env-netbox-env
+            - name: EMAIL_USE_TLS
+              valueFrom:
+                configMapKeyRef:
+                  key: EMAIL_USE_TLS
+                  name: env-netbox-env
+            - name: GRAPHQL_ENABLED
+              valueFrom:
+                configMapKeyRef:
+                  key: GRAPHQL_ENABLED
+                  name: env-netbox-env
+            - name: HOUSEKEEPING_INTERVAL
+              valueFrom:
+                configMapKeyRef:
+                  key: HOUSEKEEPING_INTERVAL
+                  name: env-netbox-env
+            - name: MEDIA_ROOT
+              valueFrom:
+                configMapKeyRef:
+                  key: MEDIA_ROOT
+                  name: env-netbox-env
+            - name: METRICS_ENABLED
+              valueFrom:
+                configMapKeyRef:
+                  key: METRICS_ENABLED
+                  name: env-netbox-env
+            - name: REDIS_CACHE_DATABASE
+              valueFrom:
+                configMapKeyRef:
+                  key: REDIS_CACHE_DATABASE
+                  name: env-netbox-env
+            - name: REDIS_CACHE_HOST
+              valueFrom:
+                configMapKeyRef:
+                  key: REDIS_CACHE_HOST
+                  name: env-netbox-env
+            - name: REDIS_CACHE_INSECURE_SKIP_TLS_VERIFY
+              valueFrom:
+                configMapKeyRef:
+                  key: REDIS_CACHE_INSECURE_SKIP_TLS_VERIFY
+                  name: env-netbox-env
+            - name: REDIS_CACHE_PASSWORD
+              valueFrom:
+                configMapKeyRef:
+                  key: REDIS_CACHE_PASSWORD
+                  name: env-netbox-env
+            - name: REDIS_CACHE_SSL
+              valueFrom:
+                configMapKeyRef:
+                  key: REDIS_CACHE_SSL
+                  name: env-netbox-env
+            - name: REDIS_DATABASE
+              valueFrom:
+                configMapKeyRef:
+                  key: REDIS_DATABASE
+                  name: env-netbox-env
+            - name: REDIS_HOST
+              valueFrom:
+                configMapKeyRef:
+                  key: REDIS_HOST
+                  name: env-netbox-env
+            - name: REDIS_INSECURE_SKIP_TLS_VERIFY
+              valueFrom:
+                configMapKeyRef:
+                  key: REDIS_INSECURE_SKIP_TLS_VERIFY
+                  name: env-netbox-env
+            - name: REDIS_PASSWORD
+              valueFrom:
+                configMapKeyRef:
+                  key: REDIS_PASSWORD
+                  name: env-netbox-env
+            - name: REDIS_SSL
+              valueFrom:
+                configMapKeyRef:
+                  key: REDIS_SSL
+                  name: env-netbox-env
+            - name: RELEASE_CHECK_URL
+              valueFrom:
+                configMapKeyRef:
+                  key: RELEASE_CHECK_URL
+                  name: env-netbox-env
+            - name: SECRET_KEY
+              valueFrom:
+                configMapKeyRef:
+                  key: SECRET_KEY
+                  name: env-netbox-env
+            - name: SKIP_SUPERUSER
+              valueFrom:
+                configMapKeyRef:
+                  key: SKIP_SUPERUSER
+                  name: env-netbox-env
+            - name: SUPERUSER_API_TOKEN
+              valueFrom:
+                configMapKeyRef:
+                  key: SUPERUSER_API_TOKEN
+                  name: env-netbox-env
+            - name: SUPERUSER_EMAIL
+              valueFrom:
+                configMapKeyRef:
+                  key: SUPERUSER_EMAIL
+                  name: env-netbox-env
+            - name: SUPERUSER_NAME
+              valueFrom:
+                configMapKeyRef:
+                  key: SUPERUSER_NAME
+                  name: env-netbox-env
+            - name: SUPERUSER_PASSWORD
+              valueFrom:
+                configMapKeyRef:
+                  key: SUPERUSER_PASSWORD
+                  name: env-netbox-env
+            - name: WEBHOOKS_ENABLED
+              valueFrom:
+                configMapKeyRef:
+                  key: WEBHOOKS_ENABLED
+                  name: env-netbox-env
+          image: ' '
+          livenessProbe:
+            exec:
+              command:
+                - ps -aux | grep -v grep | grep -q housekeeping || exit 1
+            initialDelaySeconds: 20
+            periodSeconds: 15
+            timeoutSeconds: 3
+          name: netbox-housekeeping
+          resources: {}
+          volumeMounts:
+            - mountPath: /etc/netbox/config
+              name: netbox-housekeeping-claim0
+              readOnly: true
+            - mountPath: /etc/netbox/reports
+              name: netbox-housekeeping-claim1
+              readOnly: true
+            - mountPath: /etc/netbox/scripts
+              name: netbox-housekeeping-claim2
+              readOnly: true
+            - mountPath: /opt/netbox/netbox/media
+              name: netbox-media-files
+      restartPolicy: Always
+      volumes:
+        - name: netbox-housekeeping-claim0
+          persistentVolumeClaim:
+            claimName: netbox-housekeeping-claim0
+            readOnly: true
+        - name: netbox-housekeeping-claim1
+          persistentVolumeClaim:
+            claimName: netbox-housekeeping-claim1
+            readOnly: true
+        - name: netbox-housekeeping-claim2
+          persistentVolumeClaim:
+            claimName: netbox-housekeeping-claim2
+            readOnly: true
+        - name: netbox-media-files
+          persistentVolumeClaim:
+            claimName: netbox-media-files
+  test: false
+  triggers:
+    - type: ConfigChange
+    - imageChangeParams:
+        automatic: true
+        containerNames:
+          - netbox-housekeeping
+        from:
+          kind: ImageStreamTag
+          name: netbox-housekeeping:${VERSION-v3.4-2.4.0}
+      type: ImageChange
+status:
+  availableReplicas: 0
+  latestVersion: 0
+  observedGeneration: 0
+  replicas: 0
+  unavailableReplicas: 0
+  updatedReplicas: 0

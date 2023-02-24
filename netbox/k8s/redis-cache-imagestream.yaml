@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: ImageStream
+metadata:
+  creationTimestamp: null
+  labels:
+    io.kompose.service: redis-cache
+  name: redis-cache
+spec:
+  lookupPolicy:
+    local: false
+  tags:
+    - annotations: null
+      from:
+        kind: DockerImage
+        name: redis:7-alpine
+      generation: null
+      importPolicy: {}
+      name: 7-alpine
+      referencePolicy:
+        type: ""
+status:
+  dockerImageRepository: ""

@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: ImageStream
+metadata:
+  creationTimestamp: null
+  labels:
+    io.kompose.service: netbox-worker
+  name: netbox-worker
+spec:
+  lookupPolicy:
+    local: false
+  tags:
+    - annotations: null
+      from:
+        kind: DockerImage
+        name: netboxcommunity/netbox:${VERSION-v3.4-2.4.0}
+      generation: null
+      importPolicy: {}
+      name: ${VERSION-v3.4-2.4.0}
+      referencePolicy:
+        type: ""
+status:
+  dockerImageRepository: ""
