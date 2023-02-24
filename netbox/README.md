@@ -38,12 +38,23 @@ oc set env \
   -e REDIS_PORT=6379 \
   -e REDIS_CACHE_PORT=6379
 
+# make netbox media persistent
+oc set volume \
+  deploy/netbox \
+  --add \
+  --name=netbox-media \
+  --mount-path=/opt/netbox/netbox/media \
+  -t pvc \
+  --claim-size=1G \
+  --overwrite
+
+# create service
 oc expose deployment \
 netbox \
   --port 8080 \
-  --overrides='{"spec":{"tls":{"termination":"edge"}}}' \
   -l app=netbox
 
+# create route
 oc expose service \
 netbox \
   --overrides='{"spec":{"tls":{"termination":"edge"}}}' \
@@ -56,6 +67,18 @@ oc new-app \
   -l app=netbox
 
 cat postgres.env | oc set env -e - deploy/postgresql
+
+# make db persistent
+oc set volume \
+  deploy/postgresql \
+  --add \
+  --name=netbox \
+  --mount-path=/var/lib/postgresql/data \
+  --sub-path=db \
+  -t pvc \
+  --claim-size=1G \
+  --overwrite
+
 
 # setup redis
 oc new-app \
