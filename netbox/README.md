@@ -21,26 +21,35 @@ git clone git@github.com:netbox-community/netbox-docker.git
 OpenShift hacking
 
 ```
+APP_NAME=netbox
+APP_LABEL="app.kubernetes.io/part-of=${APP_NAME}"
+CONTAINER_IMAGE=quay.io/netboxcommunity/netbox:latest
+NAMESPACE=netbox
+
 # new project
-oc new-project netbox-test
+oc new-project ${NAMESPACE}
 
 # setup netbox container
 oc new-app \
-  quay.io/netboxcommunity/netbox:latest \
-  --name netbox \
-  -l app=netbox
+  --name ${APP_NAME} \
+  -l ${APP_LABEL} \
+  -n ${NAMESPACE} \
+  ${CONTAINER_IMAGE}
 
 # setup env vars for netbox
-cat netbox.env | oc set env -e - deploy/netbox
+cat netbox.env | oc set env -e - deployment/${APP_NAME}
+
 oc set env \
-  deployment/netbox \
+  deployment/${APP_NAME} \
+  -n ${NAMESPACE} \
+  -l ${APP_LABEL} \
   -e DB_WAIT_DEBUG=1 \
   -e REDIS_PORT=6379 \
   -e REDIS_CACHE_PORT=6379
 
 # make netbox media persistent
 oc set volume \
-  deploy/netbox \
+  deployment/${APP_NAME} \
   --add \
   --name=netbox-media \
   --mount-path=/opt/netbox/netbox/media \
@@ -50,50 +59,53 @@ oc set volume \
 
 # create service
 oc expose deployment \
-netbox \
-  --port 8080 \
-  -l app=netbox
+  ${APP_NAME} \
+  -n ${NAMESPACE} \
+  -l ${APP_LABEL} \
+  --port 8080
 
 # create route
 oc expose service \
-netbox \
-  --overrides='{"spec":{"tls":{"termination":"edge"}}}' \
-  -l app=netbox
+  ${APP_NAME} \
+  -n ${NAMESPACE} \
+  -l ${APP_LABEL} \
+  --overrides='{"spec":{"tls":{"termination":"edge"}}}'
 
 # setup postgres
 oc new-app \
-  --image-stream=postgresql:12-el8 \
-  --name postgresql \
-  -l app=netbox
+  --name ${APP_NAME}-db \
+  -n ${NAMESPACE} \
+  -l ${APP_LABEL} \
+  --image-stream=postgresql:12-el8
 
-cat postgres.env | oc set env -e - deploy/postgresql
+cat postgres.env | oc set env -e - deployment/${APP_NAME}-db
 
 # make db persistent
 oc set volume \
-  deploy/postgresql \
+  deployment/${APP_NAME}-db \
   --add \
-  --name=netbox \
+  --name=netbox-db \
   --mount-path=/var/lib/postgresql/data \
   --sub-path=db \
   -t pvc \
   --claim-size=1G \
   --overwrite
 
-
 # setup redis
 oc new-app \
-  --image-stream=redis:latest \
-  --name redis \
-  -l app=netbox
+  --name ${APP_NAME}-redis \
+  -n ${NAMESPACE} \
+  -l ${APP_LABEL} \
+  --image-stream=redis:latest
 
-cat redis.env | oc set env -e - deploy/redis
+cat redis.env | oc set env -e - deployment/${APP_NAME}-redis
 
 # setup redis-cache
 oc new-app \
-  --image-stream=redis:latest \
-  --name redis-cache \
-  -l app=netbox
+  --name ${APP_NAME}-redis-cache \
+  -n ${NAMESPACE} \
+  -l ${APP_LABEL} \
+  --image-stream=redis:latest
 
-cat redis-cache.env | oc set env -e - deploy/redis-cache
-
+cat redis-cache.env | oc set env -e - deployment/${APP_NAME}-redis-cache
 ```
