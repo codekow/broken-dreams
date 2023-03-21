@@ -1,0 +1,24 @@
+# permissions for end users to edit airflows.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: airflow-editor-role
+rules:
+- apiGroups:
+  - demo.example.com
+  resources:
+  - airflows
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - demo.example.com
+  resources:
+  - airflows/status
+  verbs:
+  - get
