@@ -1,0 +1,4 @@
+joblib
+fastapi
+scikit-learn
+uvicorn
