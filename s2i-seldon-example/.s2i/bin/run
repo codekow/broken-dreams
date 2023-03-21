@@ -1,0 +1,38 @@
+#!/bin/bash
+
+run_null(){
+    echo "Usage: insert here"
+    echo ""
+    echo "This container does nothing by default."
+    echo "Ponder the universe with infinate sleep..."
+
+    sleep infinity
+}
+
+run_default(){
+    ${STI_SCRIPTS_PATH}/run
+}
+
+run_seldon(){
+    echo "---> Configuring Seldon"
+
+    MODEL_NAME="${MODEL_NAME:-Main}"
+    API_TYPE="${API_TYPE:-REST}"
+    SERVICE_TYPE="${SERVICE_TYPE:-MODEL}"
+    PERSISTENCE="${PERSISTENCE:-0}"
+
+    echo "Using the following settings:"
+    echo "MODEL_NAME: ${MODEL_NAME}"
+    echo "SERVICE_TYPE: ${SERVICE_TYPE}"
+    echo "PERSISTENCE: ${PERSISTENCE}"
+
+    echo ""
+
+    echo "---> Starting Seldon"
+
+    exec seldon-core-microservice ${MODEL_NAME} --service-type ${SERVICE_TYPE} --persistence ${PERSISTENCE}
+}
+
+# run_default
+run_seldon
+run_null
