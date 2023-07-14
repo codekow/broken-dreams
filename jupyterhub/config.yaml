@@ -11,6 +11,24 @@ hub:
   networkPolicy:
     enabled: false
 
+proxy:
+  chp:
+    containerSecurityContext:
+      runAsGroup: 
+      runAsUser:
+    networkPolicy:
+      enabled: false
+  service:
+    type: ClusterIP
+
+scheduling:
+  userScheduler:
+    enabled: false
+  podPriority:
+    enabled: false
+  userPlaceholder:
+    enabled: false
+
 singleuser:
   profileList:
   - display_name: "Sample notebook"
@@ -33,27 +51,7 @@ singleuser:
   uid:
   fsGid:
 
-scheduling:
-  userScheduler:
-    enabled: false
-    containerSecurityContext:
-      runAsGroup: 
-      runAsUser:
-
-proxy:
-  chp:
-    containerSecurityContext:
-      runAsGroup: 
-      runAsUser:
-    networkPolicy:
-      enabled: false
-  service:
-    type: ClusterIP
-
 prePuller:
-  containerSecurityContext:
-      runAsGroup: 
-      runAsUser:
   hook:
     enabled: false
   continuous:
