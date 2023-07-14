@@ -12,8 +12,26 @@ hub:
     enabled: false
 
 singleuser:
+  profileList:
+  - display_name: "Sample notebook"
+    description: "Default image for JupyterHub"
+    kubespawner_override:
+      image: sample-notebook:latest
+    default: true  
+  - display_name: "Basic notebook server"
+    description: "Just python3 and you"
+    kubespawner_override:
+      image: minimal-notebook:latest
+  - display_name: "Data science notebook server"
+    description: "Python (with lots of libraries), R, and Julia all running."
+    kubespawner_override:
+      image: datascience-notebook:latest
+  cloudMetadata:
+    blockWithIptables: false
   networkPolicy:
     enabled: false
+  uid:
+  fsGid:
 
 scheduling:
   userScheduler:
