@@ -1,0 +1,61 @@
+hub:
+  config:
+    JupyterHub:
+      admin_access: true
+      authenticator_class: dummy
+  podSecurityContext:
+    fsGroup:
+  containerSecurityContext:
+    runAsGroup: 
+    runAsUser:
+  networkPolicy:
+    enabled: false
+
+singleuser:
+  networkPolicy:
+    enabled: false
+
+scheduling:
+  userScheduler:
+    enabled: false
+    containerSecurityContext:
+      runAsGroup: 
+      runAsUser:
+
+proxy:
+  chp:
+    containerSecurityContext:
+      runAsGroup: 
+      runAsUser:
+    networkPolicy:
+      enabled: false
+  service:
+    type: ClusterIP
+
+prePuller:
+  containerSecurityContext:
+      runAsGroup: 
+      runAsUser:
+  hook:
+    enabled: false
+  continuous:
+    enabled: false
+
+ingress:
+  enabled: false
+
+cull:
+  enabled: true
+  users: false # --cull-users
+  adminUsers: true # --cull-admin-users
+  removeNamedServers: false # --remove-named-servers
+  timeout: 3600 # --timeout
+  every: 600 # --cull-every
+  concurrency: 10 # --concurrency
+  maxAge: 0 # --max-age
+
+debug:
+  enabled: true
+
+global:
+  safeToShowValues: true
