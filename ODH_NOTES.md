@@ -13,10 +13,10 @@ The primary differentiators are:
 ### Before
 
 ```
-oc api-resources > api-before.txt
-oc get crd > crd-before.txt
-oc get sub -A > sub-before.txt
-oc get csv -A > csv-before.txt
+oc api-resources | sort > api-before.txt
+oc get crd | sort > crd-before.txt
+oc get sub -A | sort > sub-before.txt
+oc get csv -A | sort > csv-before.txt
 ```
 
 ### Install
@@ -114,8 +114,8 @@ YAML
 
 ```
 # see what crds got installed
-oc api-resources > api-after.txt
-oc get crd > crd-after.txt
+oc api-resources | sort > api-after.txt
+oc get crd | sort > crd-after.txt
 
 diff -u api-before.txt api-after.txt > api-diff.txt
 diff -u crd-before.txt crd-after.txt > crd-diff.txt
