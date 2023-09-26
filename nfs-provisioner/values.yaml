@@ -1,0 +1,22 @@
+nfs:
+  server: '192.168.156.10'
+  path: /home/nfs-xtoph156/hello-world
+
+storageClass:
+  defaultClass: true
+
+  # Set a StorageClass name
+  # Ignored if storageClass.create is false
+  name: nfs-client
+  reclaimPolicy: Delete
+  # archiveOnDelete: true
+  onDelete: delete
+  pathPattern: '${.PVC.namespace}-${.PVC.name}'
+  # Set access mode - ReadWriteOnce, ReadOnlyMany or ReadWriteMany
+  accessModes: ReadWriteOnce
+  # Set volume bindinng mode - Immediate or WaitForFirstConsumer
+  volumeBindingMode: Immediate
+
+serviceAccount:
+  create: true
+  name: nfs-provisioner
