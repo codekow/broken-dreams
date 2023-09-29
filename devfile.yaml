@@ -24,7 +24,7 @@ components:
         - name: TIMEOUT
           value: 12m
       command:
-        - "/bin/bash"
+        - "/bin/sh"
         - "-c"
         - |
           #!/usr/bin/env sh
