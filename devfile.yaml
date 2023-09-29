@@ -3,26 +3,62 @@ metadata:
   name: "myDevfile"
   version: "0.0.1"
 components:
-  - name: cleanup-job
-    openshift:
-      inlined: |
-        apiVersion: batch/v1
-        kind: Job
-        metadata:
-          name: pi
-        spec:
-          template:
-            spec:
-              containers:
-              - name: job
-                image: someimage
-                command: ["some",  "command", "with", "parameters"]
-              restartPolicy: Never
-          backoffLimit: 4
+  - name: can-i-haz-gpu
+    container:
+      image: image-registry.openshift-image-registry.svc:5000/openshift/cli:latest
+      env:
+        - name: TIMEOUT
+          value: 12m
+      command:
+        - "/bin/bash"
+        - "-c"
+        - |
+          #!/usr/bin/env sh
+
+          oc apply -f - <<YAML
+          apiVersion: v1
+          kind: Pod
+          metadata:
+            name: gpu-operator-test
+          spec:
+            restartPolicy: OnFailure
+            containers:
+              - name: cuda-vector-add
+                # https://github.com/kubernetes/kubernetes/blob/v1.7.11/test/images/nvidia-cuda/Dockerfile
+                image: "k8s.gcr.io/cuda-vector-add:v0.1"
+                resources:
+                  limits:
+                    nvidia.com/gpu: 1
+          YAML
+
+          echo "
+            !!! NOTICE !!!
+
+            A TIMEOUT of at least 12m is needed to give the
+            cluster autoscaler and GPU operator time to configure
+            new nodes.
+          "
+
+          echo "Waiting up to ${TIMEOUT} for pod to run..."
+
+          time oc wait \
+            pod/gpu-operator-test \
+            --for=jsonpath='{.status.phase}'=Succeeded \
+            --timeout="${TIMEOUT}"
+
+          if [[ $? -eq 1 ]]; then
+            echo "Timeout Reached - Rowing the slow boat..." | tee $(results.output.path)
+          else
+            oc get pod/gpu-operator-test -o jsonpath='{.status.phase}' | tee $(results.output.path)
+            # oc logs pod/gpu-operator-test | grep -o PASSED | tee $(results.output.path)
+          fi
+
+          exit 0
+
 commands:
-  - id: cleanup-job
+  - id: can-i-haz-gpu
     apply:
-      component: cleanup-job      
+      component: can-i-haz-gpu      
 events:
   preStart:
-    - cleanup-job
+    - can-i-haz-gpu
