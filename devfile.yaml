@@ -70,9 +70,9 @@ components:
           exit 0
 
 commands:
-  - id: check-gpu
+  - id: can-i-haz-gpu
     apply:
       component: can-i-haz-gpu      
 events:
   preStart:
-    - check-gpu
+    - can-i-haz-gpu
