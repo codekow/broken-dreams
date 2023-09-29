@@ -6,7 +6,7 @@ components:
   - name: can-i-haz-gpu
     container:
       image: image-registry.openshift-image-registry.svc:5000/openshift/cli:latest
-      dedicatedPod: true
+      # dedicatedPod: true
       env:
         - name: TIMEOUT
           value: 12m
