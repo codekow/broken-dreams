@@ -26,6 +26,7 @@ components:
       command:
         - "/bin/sh"
         - "-c"
+      args:
         - |
           #!/usr/bin/env sh
 
