@@ -6,6 +6,7 @@ components:
   - name: can-i-haz-gpu
     container:
       image: image-registry.openshift-image-registry.svc:5000/openshift/cli:latest
+      dedicatedPod: true
       env:
         - name: TIMEOUT
           value: 12m
@@ -44,7 +45,7 @@ components:
           time oc wait \
             pod/gpu-operator-test \
             --for=jsonpath='{.status.phase}'=Succeeded \
-            --timeout="${TIMEOUT}"
+            --timeout="${TIMEOUT:-12m}"
 
           if [[ $? -eq 1 ]]; then
             echo "Timeout Reached - Rowing the slow boat..." | tee $(results.output.path)
