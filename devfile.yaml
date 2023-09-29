@@ -2,6 +2,9 @@ schemaVersion: "2.2.0"
 metadata:
   name: "myDevfile"
   version: "0.0.1"
+attributes:
+#   controller.devfile.io/scc: container-build
+  controller.devfile.io/storage-type: ephemeral
 components:
   - attributes:
       container-overrides:
