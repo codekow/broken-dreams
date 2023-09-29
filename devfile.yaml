@@ -4,7 +4,7 @@ metadata:
   version: "0.0.1"
 components:
   - name: cleanup-job
-    kubernetes:
+    openshift:
       inlined: |
         apiVersion: batch/v1
         kind: Job
