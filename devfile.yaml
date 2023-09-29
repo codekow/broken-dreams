@@ -1,50 +1,28 @@
-schemaVersion: 2.2.0
+schemaVersion: "2.2.0"
 metadata:
-  name: devspaces-gpu
-attributes:
-#   controller.devfile.io/scc: container-build
-  controller.devfile.io/storage-type: ephemeral
-# projects:
-#   - name: devspaces-gpu
-#     git:
-#       remotes:
-#         origin: "https://github.com/bkoz/devspaces.git"
-#       checkoutFrom:
-#         revision: main
+  name: "myDevfile"
+  version: "0.0.1"
 components:
-  - name: haz-gpu 
+  - name: cleanup-job
     kubernetes:
       inlined: |
-        apiVersion: v1
-        kind: Pod
+        apiVersion: batch/v1
+        kind: Job
         metadata:
-          name: gpu-operator-test
+          name: pi
         spec:
-          restartPolicy: OnFailure
-          containers:
-            - name: cuda-vector-add
-              # https://github.com/kubernetes/kubernetes/blob/v1.7.11/test/images/nvidia-cuda/Dockerfile
-              image: "k8s.gcr.io/cuda-vector-add:v0.1"
-              resources:
-                limits:
-                  nvidia.com/gpu: 1
-  - attributes:
-      container-overrides:
-        resources:
-          limits:
-            nvidia.com/gpu: '1'
-      controller.devfile.io/merge-contribution: true
-    container:
-      image: ghcr.io/redhat-na-ssa/udi-cuda:latest
-      memoryLimit: 2G
-      cpuLimit: 1000m
-      mountSources: true
-      sourceMapping: /projects
-    name: python
+          template:
+            spec:
+              containers:
+              - name: job
+                image: someimage
+                command: ["some",  "command", "with", "parameters"]
+              restartPolicy: Never
+          backoffLimit: 4
 commands:
-  - id: haz-gpu
+  - id: cleanup-job
     apply:
-      component: haz-gpu      
+      component: cleanup-job      
 events:
-  preStart:
-    - haz-gpu
+  postStop:
+    - cleanup-job
