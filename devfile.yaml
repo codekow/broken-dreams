@@ -24,8 +24,8 @@ components:
         - name: TIMEOUT
           value: 12m
       command:
-        - "bash"
-        - "-c"
+        - bash
+        - -c
         - |
           #!/bin/bash
           set -x
