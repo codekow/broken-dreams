@@ -17,60 +17,15 @@ components:
       sourceMapping: /projects
     name: python
   - name: can-i-haz-gpu
+    attributes:
+      container-overrides:
+        resources:
+          limits:
+            nvidia.com/gpu: '1'
     container:
-      image: image-registry.openshift-image-registry.svc:5000/openshift/cli:latest
+      image: k8s.gcr.io/cuda-vector-add:v0.1
       # dedicatedPod: true
       memoryLimit: 512Mi
-      env:
-        - name: TIMEOUT
-          value: 12m
-      command:
-        - bash
-        - -c
-        - |
-          #!/bin/bash
-          set -x
-
-          oc apply -f - <<YAML
-          apiVersion: v1
-          kind: Pod
-          metadata:
-            name: gpu-operator-test
-          spec:
-            restartPolicy: OnFailure
-            containers:
-              - name: cuda-vector-add
-                # https://github.com/kubernetes/kubernetes/blob/v1.7.11/test/images/nvidia-cuda/Dockerfile
-                image: "k8s.gcr.io/cuda-vector-add:v0.1"
-                resources:
-                  limits:
-                    nvidia.com/gpu: 1
-          YAML
-
-          echo "
-            !!! NOTICE !!!
-
-            A TIMEOUT of at least 12m is needed to give the
-            cluster autoscaler and GPU operator time to configure
-            new nodes.
-          "
-
-          echo "Waiting up to ${TIMEOUT} for pod to run..."
-
-          time oc wait \
-            pod/gpu-operator-test \
-            --for=jsonpath='{.status.phase}'=Succeeded \
-            --timeout="${TIMEOUT:-12m}"
-
-          if [[ $? -eq 1 ]]; then
-            echo "Timeout Reached - Rowing the slow boat..." | tee $(results.output.path)
-          else
-            oc get pod/gpu-operator-test -o jsonpath='{.status.phase}' | tee $(results.output.path)
-            # oc logs pod/gpu-operator-test | grep -o PASSED | tee $(results.output.path)
-          fi
-
-          exit 0
-
 commands:
   - id: can-i-haz-gpu
     apply:
