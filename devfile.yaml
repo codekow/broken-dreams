@@ -23,7 +23,7 @@ components:
           limits:
             nvidia.com/gpu: '1'
     container:
-      image: k8s.gcr.io/cuda-vector-add:v0.1
+      image: image-registry.openshift-image-registry.svc:5000/openshift/cli:latest
       # dedicatedPod: true
       memoryLimit: 512Mi
 commands:
