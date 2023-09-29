@@ -24,11 +24,11 @@ components:
         - name: TIMEOUT
           value: 12m
       command:
-        - "/bin/sh"
+        - "bash"
         - "-c"
-      args:
         - |
-          #!/usr/bin/env sh
+          #!/bin/bash
+          set -x
 
           oc apply -f - <<YAML
           apiVersion: v1
