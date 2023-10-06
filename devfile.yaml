@@ -1,10 +1,16 @@
-schemaVersion: "2.2.0"
+schemaVersion: 2.2.0
 metadata:
-  name: "myDevfile"
-  version: "0.0.1"
+  name: devspaces-gpu
 attributes:
 #   controller.devfile.io/scc: container-build
   controller.devfile.io/storage-type: ephemeral
+# projects:
+#   - name: devspaces-gpu
+#     git:
+#       remotes:
+#         origin: "https://github.com/bkoz/devspaces.git"
+#       checkoutFrom:
+#         revision: main
 components:
   - attributes:
       container-overrides:
@@ -13,26 +19,10 @@ components:
             nvidia.com/gpu: '1'
       controller.devfile.io/merge-contribution: true
     container:
-      image: ghcr.io/redhat-na-ssa/udi-cuda:latest
+      # image: ghcr.io/redhat-na-ssa/udi-cuda:latest
+      image: ghcr.io/redhat-na-ssa/udi-cuda:11.8.0-devel-ubi8
       memoryLimit: 2G
       cpuLimit: 1000m
       mountSources: true
       sourceMapping: /projects
     name: python
-  - name: can-i-haz-gpu
-    attributes:
-      container-overrides:
-        resources:
-          limits:
-            nvidia.com/gpu: '1'
-    container:
-      image: image-registry.openshift-image-registry.svc:5000/openshift/cli:latest
-      # dedicatedPod: true
-      memoryLimit: 512Mi
-commands:
-  - id: can-i-haz-gpu
-    apply:
-      component: can-i-haz-gpu      
-events:
-  preStart:
-    - can-i-haz-gpu
