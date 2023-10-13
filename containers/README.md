@@ -23,5 +23,6 @@ podman build . \
 ## Links
 
 - [Dev Spaces - Developer Images](https://github.com/devfile/developer-images)
+- https://github.com/che-incubator/che-code/tree/main/build/dockerfiles#running-visual-studio-code---open-source-code---oss-in-a-ubi9-based-container
 
 ## Notes
