@@ -1,0 +1,4 @@
+key "ddns-key" {
+        algorithm hmac-sha512;
+        secret "aqXaOtnr6ye5uaoBOJAkbPrGcsHZ4vR15Qnwyrp8R3krAjPxz9i45f7qsM//Y1EoxLmCOkKN0X3ljA/sxby2Fw==";
+};
