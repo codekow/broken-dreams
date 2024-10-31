@@ -28,14 +28,8 @@ spec:
           image: nemo:latest
           imagePullPolicy: IfNotPresent
           ports:
-            - name: api
-              containerPort: 8000
-              protocol: TCP
-            - name: grpc
-              containerPort: 8001
-              protocol: TCP
-            - name: metrics
-              containerPort: 8002
+            - name: http
+              containerPort: 8888
               protocol: TCP
           resources:
             limits:
@@ -74,13 +68,13 @@ spec:
           volumeMounts:
             - name: shm
               mountPath: /dev/shm
-            - name: models
-              mountPath: /models
+            - name: home
+              mountPath: /opt/app-root/src
               subPath: cache
       volumes:
         - name: shm
           emptyDir:
             medium: Memory
             sizeLimit: 512Mi
-        - name: models
+        - name: home
           emptyDir: {}
