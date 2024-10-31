@@ -3,7 +3,6 @@ apiVersion: build.openshift.io/v1
 kind: BuildConfig
 metadata:
   name: nemo-notebook-build
-  namespace: nvidia
 spec:
   # nodeSelector:
   #   kubernetes.io/hostname: optiplex5

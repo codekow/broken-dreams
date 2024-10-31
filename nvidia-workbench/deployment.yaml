@@ -8,7 +8,7 @@ metadata:
   annotations:
     argocd.argoproj.io/sync-wave: "1"
     image.openshift.io/triggers: >-
-      [{"from":{"kind":"ImageStreamTag","name":"nemo-testing:latest"},"fieldPath":"spec.template.spec.containers[?(@.name==\"nemo-testing\")].image","paused":"false"}]
+      [{"from":{"kind":"ImageStreamTag","name":"nemo:latest"},"fieldPath":"spec.template.spec.containers[?(@.name==\"nemo\")].image","paused":"false"}]
 spec:
   replicas: 1
   selector:
@@ -27,6 +27,9 @@ spec:
         - name: nemo
           image: nemo:latest
           imagePullPolicy: IfNotPresent
+          command:
+            - sleep
+            - infinity
           ports:
             - name: http
               containerPort: 8888
