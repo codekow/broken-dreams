@@ -58,11 +58,6 @@ spec:
       opendatahub.io/notebook-software: >-
         [{"name":"Python","version":"v3.11"},
         {"name":"Python","version":"v3.12"}]
-      openshift.io/imported-from: nvcr.io/nvidia/nemo:dev
-    scheduled: true
-    from:
-      kind: DockerImage
-      name: nvcr.io/nvidia/nemo:dev
     referencePolicy:
       type: Local
   - name: latest
