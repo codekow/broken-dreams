@@ -9,14 +9,7 @@ spec:
   source:
     dockerfile: |
       FROM nvcr.io/nvidia/nemo:dev
-
-      USER 0
-      RUN mkdir -p /opt/app-root/src
-      RUN chown -R 1001:0 /opt/app-root
-      RUN chmod -R 775 /opt/app-root
-
-      USER 1001
-      WORKDIR /opt/app-root/src
+      ENV HOME=/workspace
       ENTRYPOINT jupyter lab --ServerApp.ip=0.0.0.0 --ServerApp.allow_origin="*" --ServerApp.open_browser=False --ServerApp.token=''
   strategy:
     dockerStrategy:
