@@ -3,14 +3,32 @@ apiVersion: image.openshift.io/v1
 kind: ImageStream
 metadata:
   name: nemo
+  annotations:
+    argocd.argoproj.io/sync-wave: "5"
+    opendatahub.io/notebook-image-creator: ai-catalog
+    opendatahub.io/notebook-image-desc: |
+      VS Code in a web browser!
+
+      Code on any device with a consistent development environment
+      Use cloud servers to speed up tests, compilations, downloads, and more
+      Preserve battery life when you're on the go; all intensive tasks run on your server
+    opendatahub.io/notebook-image-name: Code Server
+    opendatahub.io/notebook-image-url: https://github.com/opendatahub-io-contrib/workbench-images
+    opendatahub.io/notebook-image-order: '10'
+  labels:
+    # note: the following label allows the notebook to show up in the dashboard
+    # note: byon = bring your own notebook?
+    app.kubernetes.io/created-by: byon
+    opendatahub.io/dashboard: "true"
+    opendatahub.io/notebook-image: "true"
 spec:
   lookupPolicy:
     local: true
   tags:
-  - name: '24.08-py3'
+  - name: 'dev'
     scheduled: true
     annotations:
-      openshift.io/imported-from: nvcr.io/nvidia/tritonserver:24.08-py3
+      openshift.io/imported-from: nvcr.io/nvidia/nemo:dev
     from:
       kind: DockerImage
       name: nvcr.io/nvidia/nemo:dev
