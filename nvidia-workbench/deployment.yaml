@@ -27,9 +27,19 @@ spec:
         - name: nemo
           image: nemo:latest
           imagePullPolicy: IfNotPresent
+          env:
+            - name: HOME
+              value: /workspace
           command:
-            - sleep
-            - infinity
+            - /bin/sh
+            - -c
+            - |
+              #!/bin/sh
+              jupyter lab \
+                --ServerApp.ip=0.0.0.0 \
+                --ServerApp.allow_origin="*" \
+                --ServerApp.open_browser=False \
+                --ServerApp.token=''
           ports:
             - name: http
               containerPort: 8888
