@@ -89,7 +89,7 @@ REM delete old recovery password
 manage-bde -protectors -delete %systemdrive% -type RecoveryPassword
 
 :bitlock
-manage-bde -on %systemdrive% -UsedSpaceOnly -SkipHardwareTest -autounlock
+manage-bde -on %systemdrive% -UsedSpaceOnly -SkipHardwareTest
 manage-bde -protectors -add %systemdrive% -RecoveryPassword
 manage-bde -protectors -add %systemdrive% -tpm
 
