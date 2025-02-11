@@ -68,7 +68,6 @@ set test /a = "qrz"
 for /F "tokens=3 delims= " %%A in ('manage-bde -status %systemdrive% ^| findstr "    Encryption Method:"') do (
 	echo %%A
 	set test = %%A
-	echo .
 	if "%%A"=="None" goto :activate
 	if "%%A"=="AES"  goto :adbackup
 	)
