@@ -80,7 +80,7 @@ for /F %%A in ('wmic /namespace:\\root\cimv2\security\microsofttpm path win32_tp
 if "%%A"=="TRUE" goto :bitlock
 )
 powershell Initialize-Tpm
-manage-bde -protectors -enable -on %systemdrive% -UsedSpaceOnly -SkipHardwareTest
+manage-bde -on %systemdrive% -UsedSpaceOnly -SkipHardwareTest -autounlock
 
 goto bitlock
 
