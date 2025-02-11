@@ -101,7 +101,7 @@ bcdedit /set {default} bootstatuspolicy ignoreallfailures
 for /F "tokens=2 delims=: " %%A in ('manage-bde -protectors -get C: -type recoverypassword ^| findstr "       ID:"') do (
 	echo %%A
 	manage-bde -protectors -adbackup %systemdrive% -id %%A
-	manage-bde -protectors %systemdrive% -id %%A
+	manage-bde -protectors -get %systemdrive% -id %%A
 )
 
 manage-bde -protectors -enable %systemdrive%
