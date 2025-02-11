@@ -69,8 +69,10 @@ for /F "tokens=3 delims= " %%A in ('manage-bde -status %systemdrive% ^| findstr 
 	echo %%A
 	set test = %%A
 	if "%%A"=="None" goto :activate
+	if "%%A"=="AES"  goto :adbackup
 	)
-goto adbackup
+
+goto reset-bitlock
 
 :activate
 echo in activate
@@ -78,6 +80,8 @@ for /F %%A in ('wmic /namespace:\\root\cimv2\security\microsofttpm path win32_tp
 if "%%A"=="TRUE" goto :bitlock
 )
 powershell Initialize-Tpm
+manage-bde -protectors -on %systemdrive%
+
 goto bitlock
 
 :reset-bitlock
@@ -88,6 +92,7 @@ manage-bde -protectors -delete %systemdrive% -type RecoveryPassword
 
 :bitlock
 manage-bde -protectors -add %systemdrive% -RecoveryPassword
+manage-bde -protectors -add %systemdrive% -tpm
 
 REM next two lines disables system restore to help prevent bitlocker recovery key request
 bcdedit /set {default} recoveryenabled No 
