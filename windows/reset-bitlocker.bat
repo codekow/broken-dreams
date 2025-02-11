@@ -68,6 +68,7 @@ set test /a = "qrz"
 for /F "tokens=3 delims= " %%A in ('manage-bde -status %systemdrive% ^| findstr "    Encryption Method:"') do (
 	echo %%A
 	set test = %%A
+	echo .
 	if "%%A"=="None" goto :activate
 	if "%%A"=="AES"  goto :adbackup
 	)
@@ -99,7 +100,7 @@ bcdedit /set {default} bootstatuspolicy ignoreallfailures
 
 :adbackup
 for /F "tokens=2 delims=: " %%A in ('manage-bde -protectors -get C: -type recoverypassword ^| findstr "       ID:"') do (
-	echo %%A
+	REM echo %%A
 	manage-bde -protectors -adbackup %systemdrive% -id %%A
 	manage-bde -protectors -get %systemdrive% -id %%A
 )
