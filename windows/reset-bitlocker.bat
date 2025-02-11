@@ -75,12 +75,10 @@ for /F "tokens=3 delims= " %%A in ('manage-bde -status %systemdrive% ^| findstr 
 goto reset-bitlock
 
 :activate
-echo in activate
 for /F %%A in ('wmic /namespace:\\root\cimv2\security\microsofttpm path win32_tpm get IsEnabled_InitialValue ^| findstr "TRUE"') do (
 if "%%A"=="TRUE" goto :bitlock
 )
 powershell Initialize-Tpm
-manage-bde -on %systemdrive% -UsedSpaceOnly -SkipHardwareTest -autounlock
 
 goto bitlock
 
@@ -91,6 +89,7 @@ REM delete old recovery password
 manage-bde -protectors -delete %systemdrive% -type RecoveryPassword
 
 :bitlock
+manage-bde -on %systemdrive% -UsedSpaceOnly -SkipHardwareTest -autounlock
 manage-bde -protectors -add %systemdrive% -RecoveryPassword
 manage-bde -protectors -add %systemdrive% -tpm
 
