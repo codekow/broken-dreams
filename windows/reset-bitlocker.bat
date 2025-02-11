@@ -70,6 +70,7 @@ for /F "tokens=3 delims= " %%A in ('manage-bde -status %systemdrive% ^| findstr 
 	set test = %%A
 	if "%%A"=="None" goto :activate
 	if "%%A"=="AES"  goto :adbackup
+	if "%%A"=="XTS-AES"  goto :adbackup
 	)
 
 goto reset-bitlock
