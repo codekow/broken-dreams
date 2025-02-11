@@ -64,37 +64,40 @@
  ::START
  ::::::::::::::::::::::::::::
 
-REM Manage-bde.exe -protectors -disable c:
 set test /a = "qrz"
 for /F "tokens=3 delims= " %%A in ('manage-bde -status %systemdrive% ^| findstr "    Encryption Method:"') do (
 	echo %%A
 	set test = %%A
 	if "%%A"=="None" goto :activate
 	)
-rem goto end
+goto adbackup
+
 :activate
 echo in activate
 for /F %%A in ('wmic /namespace:\\root\cimv2\security\microsofttpm path win32_tpm get IsEnabled_InitialValue ^| findstr "TRUE"') do (
 if "%%A"=="TRUE" goto :bitlock
 )
 powershell Initialize-Tpm
-:bitlock
+goto bitlock
 
-:end
+:reset-bitlock
 manage-bde -protectors -disable %systemdrive% 
+
+REM delete old recovery password
+manage-bde -protectors -delete %systemdrive% -type RecoveryPassword
+
+:bitlock
+manage-bde -protectors -add %systemdrive% -RecoveryPassword
+
 REM next two lines disables system restore to help prevent bitlocker recovery key request
 bcdedit /set {default} recoveryenabled No 
 bcdedit /set {default} bootstatuspolicy ignoreallfailures
 
-REM delete old recovery password
-manage-bde -protectors -delete %systemdrive% -type RecoveryPassword
-manage-bde -protectors -add %systemdrive% -RecoveryPassword
-
+:adbackup
 for /F "tokens=2 delims=: " %%A in ('manage-bde -protectors -get C: -type recoverypassword ^| findstr "       ID:"') do (
 	echo %%A
 	manage-bde -protectors -adbackup %systemdrive% -id %%A
 )
 
 manage-bde -protectors -enable %systemdrive%
-
-rem  manage-bde -status %systemdrive%
+manage-bde -status %systemdrive%
