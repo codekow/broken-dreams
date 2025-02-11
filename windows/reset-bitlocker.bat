@@ -89,9 +89,9 @@ REM delete old recovery password
 manage-bde -protectors -delete %systemdrive% -type RecoveryPassword
 
 :bitlock
-manage-bde -on %systemdrive% -UsedSpaceOnly -SkipHardwareTest
 manage-bde -protectors -add %systemdrive% -RecoveryPassword
 manage-bde -protectors -add %systemdrive% -tpm
+manage-bde -on %systemdrive% -UsedSpaceOnly -SkipHardwareTest
 
 REM next two lines disables system restore to help prevent bitlocker recovery key request
 bcdedit /set {default} recoveryenabled No 
