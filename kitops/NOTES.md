@@ -1,6 +1,6 @@
 # KitOps Notes
 
-## Deploy on OpenShift
+## Easy deploy of `llama3-8b` on OpenShift
 
 ```sh
 oc new-project models
@@ -20,8 +20,18 @@ oc patch route/llama3-8b --type merge \
   -p '{"spec": {"tls": {"termination": "edge", "insecureEdgeTerminationPolicy": "Redirect"}}}'
 ```
 
+```sh
+# storage is at ~/.local/share/kitops
+kit pull jozu.ml/jozu/llama3-8b:8B-text-q8_0
+
+kit list
+
+kit info jozu.ml/jozu/llama3-8b:8B-text-q8_0
+
+kit unpack jozu.ml/jozu/llama3-8b:8B-text-q8_0 -d scratch
+```
+
 ## Links
 
 - https://jozu.ml/docs/understanding-jozu-hub/modelkit-containers.html
 - https://jozu.ml/repository/jozu/llama3-8b/8B-instruct-q5_0/deploy
-

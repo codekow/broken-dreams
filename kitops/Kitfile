@@ -1,0 +1,7 @@
+manifestVersion: 1.0.0
+package:
+  name: A model
+  description: A model that does something I don't want a human to do
+  authors: [Cory Latschkowski]
+docs:
+  - path: NOTES.md
