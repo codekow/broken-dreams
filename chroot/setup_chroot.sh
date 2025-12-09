@@ -26,7 +26,7 @@ chroot_file(){
 
 chroot_create(){
 
-    mkdir -p ${CHROOT_DIR}/{home,bin,etc,dev,tmp,lib,lib64}
+    mkdir -p ${CHROOT_DIR}/{home,bin,etc,dev,tmp,lib,lib64,proc}
 
     # add std lib
     cp /lib64/ld-linux-x86-64.so.2 "${CHROOT_DIR}/lib64/"
@@ -38,14 +38,20 @@ chroot_create(){
     mknod -m 666 ${CHROOT_DIR}/dev/random c 1 8
 
     chroot_file /usr/bin/busybox
+    chroot_file bash
     chroot_file git
     
+    ln -s bash ${CHROOT_DIR}/bin/sh
+    cp /etc/{bash.bashrc,profile} ${CHROOT_DIR}/etc
+
     chroot ${CHROOT_DIR} /bin/busybox --install -s /bin
     cp /etc/{passwd,group} ${CHROOT_DIR}/etc/
 
     mkdir -p ${CHROOT_DIR}/usr/lib/openssh/
     cp /usr/lib/openssh/sftp-server ${CHROOT_DIR}/usr/lib/openssh/
 
+    # fake root mount
+    echo "/dev/root / auto rw,relatime 0 0" > ${CHROOT_DIR}/proc/mounts
 }
 
 chroot_users(){
