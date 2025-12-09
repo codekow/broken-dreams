@@ -20,8 +20,6 @@ chroot_create(){
     chroot_file git
     chroot_file chpasswd
 
-echo "creating: user"
-
 cat > ${CHROOT_DIR}/etc/passwd << EOF
 root:x:0:0:root:/root:/bin/sh
 user:x:1000:1000:user:/:/bin/sh
