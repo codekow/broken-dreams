@@ -40,6 +40,8 @@ chroot_create(){
     chroot_file /usr/bin/busybox
     chroot_file bash
     chroot_file git
+    chroot_file restic
+    chroot_file rclone
     
     ln -s bash ${CHROOT_DIR}/bin/sh
     cp /etc/{bash.bashrc,profile} ${CHROOT_DIR}/etc
