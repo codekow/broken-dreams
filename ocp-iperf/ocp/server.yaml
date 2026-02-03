@@ -1,0 +1,11 @@
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: iperf-server
+spec:
+  #hostNetwork: true #<--------- UNCOMMENT THIS SETTING IF THE IPERF POD MUST RUN IN THE HOST NETWORK
+  nodeName: iperf-server-node.example.net #<-------- REPLACE THIS WITH THE NODE WHERE IPERF SERVER MUST RUN
+  containers:
+  - name: server
+    image: qquay.io/cloud-bulldozer/k8s-netperf:latest  #<---------- REPLACE THIS
