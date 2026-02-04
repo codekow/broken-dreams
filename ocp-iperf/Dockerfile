@@ -11,6 +11,6 @@ RUN yum install -y iperf3 && \
 
 EXPOSE 5201
 
-# Listen for kill signals and exit quickly.
 # hadolint ignore=DL3025
-CMD trap : TERM INT; sleep infinity & wait
+# CMD trap : TERM INT; sleep infinity & wait
+CMD iperf3 -s

@@ -18,7 +18,7 @@ podman network create local
 # host run
 podman run -d --rm \
     --network local \
-    --name host netperf iperf3 -s
+    --name host netperf
 
 # client run
 podman run -it --rm \
@@ -27,6 +27,14 @@ podman run -it --rm \
 ```
 
 ## OpenShift / k8s Deployment
+
+```sh
+iperf3 -c localhost
+```
+
+```sh
+iperf3 -c <host pod ip>
+```
 
 - [Dockerfile](Dockerfile)
 - [client](ocp/client.yaml)
