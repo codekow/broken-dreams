@@ -1,29 +1,31 @@
-FROM docker.io/library/ubuntu:20.04
+FROM docker.io/library/alpine:latest AS builder
 
-ARG MKP2240_VERSION=v1.6.1
+ARG MKP2240_VERSION=v1.7.0
 
-RUN apt-get update && \
-    apt-get install --no-install-recommends -y \
-      ca-certificates git \
-      gcc libc6-dev libsodium-dev make autoconf && \
-    apt-get clean all
+RUN apk add --no-cache gcc libc-dev libsodium-dev libsodium-static make autoconf git
+
+WORKDIR /app
 
 RUN git clone https://github.com/cathugger/mkp224o.git && \
     cd mkp224o && \
-    git checkout $MKP224O_REVISION && \
+    git checkout $MKP2240_VERSION && \
     ./autogen.sh && \
-    ./configure --enable-amd64-51-30k && \
+    ./configure --enable-amd64-51-30k CFLAGS="-O3 -march=x86-64 -mtune=generic -fomit-frame-pointer" LDFLAGS="-static" && \
     make && \
+    strip mkp224o && \
     cp mkp224o /usr/local/bin/mkp224o-30k && \
     make clean && \
-    ./configure && \
+    ./configure CFLAGS="-O3 -march=x86-64 -mtune=generic -fomit-frame-pointer" LDFLAGS="-static" && \
     make && \
+    strip mkp224o && \
     cp mkp224o /usr/local/bin && \
     cd .. && \
     rm -rf mkp244o
 
+FROM scratch
+WORKDIR /app
 USER 1001
 
-WORKDIR /tmp
+COPY --from=builder /usr/local/bin/ .
 
-#ENTRYPOINT /usr/local/bin/mkp224o -y
+ENTRYPOINT ["/app/mkp224o"]
