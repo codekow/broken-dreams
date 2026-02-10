@@ -1,11 +1,4 @@
-FROM registry.fedoraproject.org/fedora:36
-
-LABEL org.opencontainers.image.title='named - DNS server'
-LABEL org.opencontainers.image.description='A feature rich DNS server.'
-LABEL org.opencontainers.image.authors='Cory Latschkowski <cory@happykow.com>'
-LABEL org.opencontainers.image.documentation='https://github.com/codekow/containers.git'
-LABEL org.opencontainers.image.source='https://github.com/codekow/containers.git'
-LABEL org.opencontainers.image.licenses='MIT'
+FROM registry.fedoraproject.org/fedora:43
 
 RUN dnf -y \
     --setopt=tsflags=nodocs \
@@ -29,3 +22,10 @@ USER 1001
 EXPOSE 5353/udp 5353/tcp
 
 ENTRYPOINT /usr/sbin/named -g -c /config/named.conf
+
+LABEL org.opencontainers.image.title='named - DNS server'
+LABEL org.opencontainers.image.description='A feature rich DNS server.'
+LABEL org.opencontainers.image.authors='Cory Latschkowski <cory@happykow.com>'
+LABEL org.opencontainers.image.documentation='https://github.com/codekow/containers.git'
+LABEL org.opencontainers.image.source='https://github.com/codekow/containers.git'
+LABEL org.opencontainers.image.licenses='MIT'

@@ -4,7 +4,7 @@ ARG MKP2240_VERSION=v1.7.0
 
 RUN apk add --no-cache gcc libc-dev libsodium-dev libsodium-static make autoconf git
 
-WORKDIR /app
+WORKDIR /build
 
 RUN git clone https://github.com/cathugger/mkp224o.git && \
     cd mkp224o && \
@@ -28,4 +28,4 @@ USER 1001
 
 COPY --from=builder /usr/local/bin/ .
 
-ENTRYPOINT ["/app/mkp224o"]
+ENTRYPOINT ["/app/mkp224o-30k"]
