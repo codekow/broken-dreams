@@ -1,0 +1,6 @@
+apiVersion: example.crossplane.io/v1
+kind: App
+metadata:
+  name: my-app
+spec:
+  image: registry.redhat.io/ubi9/httpd-24:latest

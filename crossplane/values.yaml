@@ -1,0 +1,99 @@
+# affinity: {}
+# args: []
+# configuration:
+#   packages: []
+# customAnnotations: {}
+# customLabels: {}
+# deploymentStrategy: RollingUpdate
+# dnsPolicy: ''
+# extraEnvVarsCrossplane: {}
+# extraEnvVarsCrossplaneInit: {}
+# extraEnvVarsRBACManager: {}
+# extraObjects: []
+# extraVolumeMountsCrossplane: {}
+# extraVolumesCrossplane: {}
+# function:
+#   packages: []
+# functionCache:
+#   medium: ''
+#   pvc: ''
+#   sizeLimit: 512Mi
+# hostNetwork: false
+# image:
+#   ignoreTag: false
+#   pullPolicy: IfNotPresent
+#   repository: xpkg.crossplane.io/crossplane/crossplane
+#   tag: ''
+# imagePullSecrets: []
+# leaderElection: true
+# metrics:
+#   enabled: false
+#   port: ''
+# nodeSelector: {}
+# packageCache:
+#   configMap: ''
+#   medium: ''
+#   pvc: ''
+#   sizeLimit: 20Mi
+podSecurityContextCrossplane:
+  runAsUser: null
+  runAsGroup: null
+podSecurityContextRBACManager:
+  runAsUser: null
+  runAsGroup: null
+# priorityClassName: ''
+# provider:
+#   defaultActivations:
+#     - '*'
+#   packages: []
+# rbacManager:
+#   affinity: {}
+#   args: []
+#   deploy: true
+#   leaderElection: true
+#   nodeSelector: {}
+#   replicas: 1
+#   revisionHistoryLimit: null
+#   skipAggregatedClusterRoles: false
+#   tolerations: []
+#   topologySpreadConstraints: []
+# readiness:
+#   port: ''
+# registryCaBundleConfig:
+#   key: ''
+#   name: ''
+# replicas: 1
+# resourcesCrossplane:
+#   limits:
+#     cpu: 500m
+#     memory: 1024Mi
+#   requests:
+#     cpu: 100m
+#     memory: 256Mi
+# resourcesRBACManager:
+#   limits:
+#     cpu: 100m
+#     memory: 512Mi
+#   requests:
+#     cpu: 100m
+#     memory: 256Mi
+# revisionHistoryLimit: null
+# runtimeClassName: ''
+# secrets:
+#   customAnnotations: {}
+# securityContextCrossplane: {}
+# securityContextRBACManager:
+#   allowPrivilegeEscalation: false
+#   readOnlyRootFilesystem: true
+# service:
+#   customAnnotations: {}
+# serviceAccount:
+#   create: true
+#   customAnnotations: {}
+#   name: ''
+# sidecarsCrossplane: []
+# tolerations: []
+# topologySpreadConstraints: []
+# webhooks:
+#   enabled: true
+#   port: ''
