@@ -1,46 +1,42 @@
-# affinity: {}
-# args: []
-# configuration:
-#   packages: []
-# customAnnotations: {}
-# customLabels: {}
-# deploymentStrategy: RollingUpdate
-# dnsPolicy: ''
-# extraEnvVarsCrossplane: {}
-# extraEnvVarsCrossplaneInit: {}
-# extraEnvVarsRBACManager: {}
-# extraObjects: []
-# extraVolumeMountsCrossplane: {}
-# extraVolumesCrossplane: {}
-# function:
-#   packages: []
-# functionCache:
-#   medium: ''
-#   pvc: ''
-#   sizeLimit: 512Mi
-# hostNetwork: false
-# image:
-#   ignoreTag: false
-#   pullPolicy: IfNotPresent
-#   repository: xpkg.crossplane.io/crossplane/crossplane
-#   tag: ''
-# imagePullSecrets: []
-# leaderElection: true
-# metrics:
-#   enabled: false
-#   port: ''
-# nodeSelector: {}
-# packageCache:
-#   configMap: ''
-#   medium: ''
-#   pvc: ''
-#   sizeLimit: 20Mi
-podSecurityContextCrossplane:
-  runAsUser: null
-  runAsGroup: null
-podSecurityContextRBACManager:
-  runAsUser: null
-  runAsGroup: null
+# # affinity: {}
+# # args: []
+# # configuration:
+# #   packages: []
+# # customAnnotations: {}
+# # customLabels: {}
+# # deploymentStrategy: RollingUpdate
+# # dnsPolicy: ''
+# # extraEnvVarsCrossplane: {}
+# # extraEnvVarsCrossplaneInit: {}
+# # extraEnvVarsRBACManager: {}
+# # extraObjects: []
+# # extraVolumeMountsCrossplane: {}
+# # extraVolumesCrossplane: {}
+# # function:
+# #   packages: []
+# # functionCache:
+# #   medium: ''
+# #   pvc: ''
+# #   sizeLimit: 512Mi
+# # hostNetwork: false
+# # image:
+# #   ignoreTag: false
+# #   pullPolicy: IfNotPresent
+# #   repository: xpkg.crossplane.io/crossplane/crossplane
+# #   tag: ''
+# # imagePullSecrets: []
+# # leaderElection: true
+# # metrics:
+# #   enabled: false
+# #   port: ''
+# # nodeSelector: {}
+# # packageCache:
+# #   configMap: ''
+# #   medium: ''
+# #   pvc: ''
+# #   sizeLimit: 20Mi
+# podSecurityContextCrossplane: {}
+# podSecurityContextRBACManager: {}
 # priorityClassName: ''
 # provider:
 #   defaultActivations:
@@ -81,10 +77,16 @@ podSecurityContextRBACManager:
 # runtimeClassName: ''
 # secrets:
 #   customAnnotations: {}
-# securityContextCrossplane: {}
-# securityContextRBACManager:
-#   allowPrivilegeEscalation: false
-#   readOnlyRootFilesystem: true
+securityContextCrossplane:
+  allowPrivilegeEscalation: false
+  readOnlyRootFilesystem: true
+  runAsGroup: null
+  runAsUser: null
+securityContextRBACManager:
+  allowPrivilegeEscalation: false
+  readOnlyRootFilesystem: true
+  runAsGroup: null
+  runAsUser: null
 # service:
 #   customAnnotations: {}
 # serviceAccount:
