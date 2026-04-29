@@ -31,6 +31,8 @@ sudo dnsmasq -d -C /tmp/dnsmasq.conf
 curl https://downloads.openwrt.org/releases/24.10.6/targets/ath79/generic/openwrt-24.10.6-ath79-generic-tplink_deco-m4r-v1-initramfs-kernel.bin > /tmp/tftp/initramfs-kernel.bin
 ```
 
+## Start TFTP Exploit on M4R
+
 1. Use a SIM tray tool or anything else thin like a paperclip to press down the reset button that is at the bottom of the M4R and keep it pressed. Now power on the M4R or power cycle it to hard-reboot it. Don't let go of the reset button until the LED turns off.
 1. Open http://192.168.0.1 on your computer.
 1. On that page choose the exploit file and then press `Upgrade`. If you monitor your network traffic with task-manager you should see a blip from the exploit uploading and then a short burst of 2-3 seconds while the exploit pulls the initramfs file from the TFTP server. Meanwhile the webpage will tell you that the upgrade failed, but only because the M4R is now booting the initramfs firmware and isn't responding to the webpage anymore.
