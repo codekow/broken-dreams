@@ -33,5 +33,13 @@ curl https://downloads.openwrt.org/releases/24.10.6/targets/ath79/generic/openwr
 
 1. Use a SIM tray tool or anything else thin like a paperclip to press down the reset button that is at the bottom of the M4R and keep it pressed. Now power on the M4R or power cycle it to hard-reboot it. Don't let go of the reset button until the LED turns off.
 1. Open http://192.168.0.1 on your computer.
-1. On that page choose the exploit file and then press "Upgrade". If you monitor your network traffic with task-manager you should see a blip from the exploit uploading and then a short burst of 2-3 seconds while the exploit pulls the initramfs file from the TFTP server. Meanwhile the webpage will tell you that the upgrade failed, but only because the M4R is now booting the initramfs firmware and isn't responding to the webpage anymore.
+1. On that page choose the exploit file and then press `Upgrade`. If you monitor your network traffic with task-manager you should see a blip from the exploit uploading and then a short burst of 2-3 seconds while the exploit pulls the initramfs file from the TFTP server. Meanwhile the webpage will tell you that the upgrade failed, but only because the M4R is now booting the initramfs firmware and isn't responding to the webpage anymore.
 1. The M4R should now be blinking while the initramfs firmware is booting up.
+
+## Install OpenWrt Firmware
+
+1. Set your wired network interface to "auto" or "dhcp" or whatever it's called and wait for it to automatically get assigned an IP from the M4R. You might have to pull and replug the network cable for that to work.
+1. Go to http://192.168.1.1 and simply log in without any password.
+1. On that status page go to `System->Backup/Flash Firmware` at the top.
+1. Click on `Flash image...`, select the `sysupgrade` file and flash it.
+1. Wait for the M4R to flash the `sysupgrade` and reboot and then you should have a Deco M4R with a working OpenWrt firmware flashed to it.
