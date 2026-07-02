@@ -1,0 +1,21 @@
+# Wildcard PASSTHROUGH route.
+# HAProxy never decrypts: it routes by SNI and streams the raw TLS bytes to the
+# Istio ingress gateway, which terminates the client TLS on :8443.
+# wildcardPolicy: Subdomain  => admits *.pass.tlsdemo.apps.hub.k8socp.com
+---
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: tlsdemo-passthrough
+  namespace: tls-e2e-demo
+spec:
+  host: gw.pass.tlsdemo.apps.hub.k8socp.com
+  wildcardPolicy: Subdomain
+  port:
+    targetPort: https            # the gateway Service port named "https" (8443)
+  tls:
+    termination: passthrough
+  to:
+    kind: Service
+    name: istio-ingressgateway
+    weight: 100

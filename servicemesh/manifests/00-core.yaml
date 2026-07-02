@@ -1,0 +1,181 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: tls-e2e-demo
+  labels:
+    istio-injection: enabled
+---
+# ---------------------------------------------------------------------------
+# Backend workload: plain-HTTP nginx on :8080, wrapped in an Istio sidecar.
+# The sidecar + STRICT PeerAuthentication make the gateway->workload hop mTLS.
+# ---------------------------------------------------------------------------
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: backend-content
+  namespace: tls-e2e-demo
+data:
+  index.html: |
+    TLS-E2E-DEMO backend reached over the mesh. hop3=mTLS-OK
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend
+  namespace: tls-e2e-demo
+  labels: { app: backend }
+spec:
+  replicas: 1
+  selector:
+    matchLabels: { app: backend }
+  template:
+    metadata:
+      labels: { app: backend }
+    spec:
+      containers:
+        - name: nginx
+          image: nginxinc/nginx-unprivileged
+          ports: [{ containerPort: 8080 }]
+          volumeMounts:
+            - { name: content, mountPath: /usr/share/nginx/html }
+      volumes:
+        - name: content
+          configMap: { name: backend-content }
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend
+  namespace: tls-e2e-demo
+  labels: { app: backend }
+spec:
+  selector: { app: backend }
+  ports:
+    - { name: http, port: 8080, targetPort: 8080 }
+---
+# Force mTLS for every pod in the namespace -> proves the gateway->workload hop
+# is encrypted (a plaintext client to :8080 is rejected).
+apiVersion: security.istio.io/v1
+kind: PeerAuthentication
+metadata:
+  name: default
+  namespace: tls-e2e-demo
+spec:
+  mtls:
+    mode: STRICT
+---
+# ---------------------------------------------------------------------------
+# istio-ingressgateway (gateway-injection pattern, same as the repo charts).
+# Terminates the client TLS on :8443, then re-originates mTLS to the backend.
+# ---------------------------------------------------------------------------
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: istio-ingressgateway
+  namespace: tls-e2e-demo
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: istio-ingressgateway
+  namespace: tls-e2e-demo
+  labels: { app: istio-ingressgateway, istio: ingressgateway }
+spec:
+  replicas: 1
+  selector:
+    matchLabels: { app: istio-ingressgateway, istio: ingressgateway }
+  template:
+    metadata:
+      annotations:
+        inject.istio.io/templates: gateway
+        sidecar.istio.io/inject: "true"
+      labels:
+        app: istio-ingressgateway
+        istio: ingressgateway
+        sidecar.istio.io/inject: "true"
+    spec:
+      serviceAccountName: istio-ingressgateway
+      containers:
+        - name: istio-proxy
+          image: auto
+          ports:
+            - { containerPort: 15021, protocol: TCP }  # status / readiness
+            - { containerPort: 8443,  protocol: TCP }  # HTTPS (TLS terminate)
+          resources:
+            requests: { cpu: 100m, memory: 128Mi }
+            limits:   { cpu: "2",  memory: 1Gi }
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities: { drop: [ALL] }
+            privileged: false
+            readOnlyRootFilesystem: true
+            runAsNonRoot: true
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: istio-ingressgateway
+  namespace: tls-e2e-demo
+  labels: { app: istio-ingressgateway, istio: ingressgateway }
+spec:
+  type: ClusterIP
+  selector: { app: istio-ingressgateway, istio: ingressgateway }
+  ports:
+    - { name: status, port: 15021, targetPort: 15021 }
+    - { name: https,  port: 8443,  targetPort: 8443 }
+---
+# ---------------------------------------------------------------------------
+# Istio Gateway: SIMPLE TLS terminate on :8443 for BOTH wildcard subdomains,
+# using the multi-SAN wildcard cert you provide in secret gw-wildcard-cert.
+# ---------------------------------------------------------------------------
+apiVersion: networking.istio.io/v1
+kind: Gateway
+metadata:
+  name: tlsdemo-gateway
+  namespace: tls-e2e-demo
+spec:
+  selector:
+    istio: ingressgateway
+  servers:
+    # SNI-scoped server: matches the passthrough path, where the client's
+    # original SNI (e.g. foo.pass.tlsdemo...) is preserved through HAProxy.
+    - port:
+        number: 8443
+        name: https
+        protocol: HTTPS
+      tls:
+        mode: SIMPLE
+        credentialName: gw-wildcard-cert
+      hosts:
+        - "*.pass.tlsdemo.apps.hub.k8socp.com"
+        - "*.reenc.tlsdemo.apps.hub.k8socp.com"
+    # Default (catch-all) server: the OpenShift router does NOT send SNI on the
+    # reencrypt backend leg, so without this the no-SNI handshake matches no
+    # filter chain and the route 503s. This presents the cert regardless of SNI.
+    - port:
+        number: 8443
+        name: https-default
+        protocol: HTTPS
+      tls:
+        mode: SIMPLE
+        credentialName: gw-wildcard-cert
+      hosts:
+        - "*"
+---
+apiVersion: networking.istio.io/v1
+kind: VirtualService
+metadata:
+  name: tlsdemo
+  namespace: tls-e2e-demo
+spec:
+  hosts:
+    - "*.pass.tlsdemo.apps.hub.k8socp.com"
+    - "*.reenc.tlsdemo.apps.hub.k8socp.com"
+  gateways:
+    - tls-e2e-demo/tlsdemo-gateway
+  http:
+    - route:
+        - destination:
+            host: backend.tls-e2e-demo.svc.cluster.local
+            port: { number: 8080 }
