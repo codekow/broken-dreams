@@ -42,6 +42,8 @@ oc patch clusterversion version --type merge \
 
 ## Other
 
+- https://github.com/okd-project/okd/issues/2339
+
 ```sh
 oc patch clusterversion version --subresource=status --type json -p '[{"op":"remove","path":"/status/history/5"}]'
 ```
