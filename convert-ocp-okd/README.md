@@ -43,5 +43,5 @@ oc patch clusterversion version --type merge \
 ## Other
 
 ```sh
-oc edit clusterversions.config.openshift.io version --subresource=status
+oc patch clusterversion version --subresource=status --type json -p '[{"op":"remove","path":"/status/history/5"}]'
 ```
