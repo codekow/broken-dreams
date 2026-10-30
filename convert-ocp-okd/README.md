@@ -29,3 +29,18 @@ oc adm upgrade --force \
     quay.io/okd/scos-release:4.21.0-okd-scos.9
     # quay.io/okd/scos-release@sha256:ea8a1ccc0173d6d880a7ce880b11f954fa18fda74afe8c2ce7ce48086e94101b
 ```
+
+```sh
+oc delete clusterimagepolicy allow-upgrade-to-okd
+```
+
+```sh
+oc patch clusterversion version --type merge \
+  -p '{"spec":{"upstream":"https://updates.okd.io/api/updates/graph","channel":"stable-4.21"}}'
+```
+
+## Other
+
+```sh
+oc edit clusterversions.config.openshift.io version --subresource=status
+```
