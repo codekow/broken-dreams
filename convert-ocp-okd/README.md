@@ -45,6 +45,7 @@ oc patch clusterversion version --type merge \
 - https://github.com/okd-project/okd/issues/2339
 
 ```sh
+# fix grub issues when converting over to SCOS
 mkdir /mnt/efi
 mount /dev/sda2 /mnt/efi
 
