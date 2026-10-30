@@ -35,6 +35,7 @@ oc delete clusterimagepolicy allow-upgrade-to-okd
 ```
 
 ```sh
+# https://okd.io/blog/2026/09/18/okd-cincinnati
 oc patch clusterversion version --type merge \
   -p '{"spec":{"upstream":"https://updates.okd.io/api/updates/graph","channel":"stable-4.21"}}'
 ```
