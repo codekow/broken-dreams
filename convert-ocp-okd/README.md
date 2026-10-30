@@ -45,5 +45,19 @@ oc patch clusterversion version --type merge \
 - https://github.com/okd-project/okd/issues/2339
 
 ```sh
+mkdir /mnt/efi
+mount /dev/sda2 /mnt/efi
+
+cp /mnt/efi/EFI/redhat/grub.cfg \
+   /mnt/efi/EFI/centos/grub.cfg
+
+cp /mnt/efi/EFI/redhat/bootuuid.cfg \
+   /mnt/efi/EFI/centos/bootuuid.cfg
+
+umount /mnt/efi
+rmdir /mnt/efi
+```
+
+```sh
 oc patch clusterversion version --subresource=status --type json -p '[{"op":"remove","path":"/status/history/5"}]'
 ```
